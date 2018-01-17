@@ -1,11 +1,13 @@
 package com.example.justin.wrestlingapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,41 +26,58 @@ import static android.app.ProgressDialog.show;
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
 
 
+    public static ArrayList <String> list = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-        ArrayList <String> list = new ArrayList<String>();
-        TextView listItem = (TextView) findViewById(R.id.listItem);
-        list.add("test1");
-        list.add("test2");
-        list.add("test3");
+
+        TextView Names = (TextView) findViewById(R.id.listItem);
+
+
+        //Test to see how many items in the array this thing detects
+        //Toast.makeText(getApplicationContext(), "Entered Screen",Toast.LENGTH_SHORT).show();
         //Used for setting the player names to the TextView, figure out how to fix that
-        /*for(int i=1; i<list.size()-1;i++){
-            listItem.setText(list.get(i));
-
-        }
-        */
-
         ListView MatchList = (ListView)findViewById(R.id.MatchList);
         MatchList.setAdapter(new ListAdapter(this,R.layout.match_list_layout,list));
         SetButtons();
        
 
         }
+    public static ArrayList<String> getNamesList(){
+        return list;
+    }
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this, MainScreen.class));
+    }
+
     public void SetButtons(){
         Button ManagePlayersButton = (Button) (findViewById(R.id.btnAddPlayers));
         Button ManageMatchesButton = (Button) (findViewById(R.id.btnAddMatches));
         ManagePlayersButton.setOnClickListener((View.OnClickListener) this);
         ManageMatchesButton.setOnClickListener((View.OnClickListener) this);
-    }
 
+
+
+
+        //Names.setText("Sup");
+    }
+    //Add Players Button
     public void onClick (View v){
         if (v.getId() == R.id.btnAddPlayers) {
-            startActivity(new Intent(MainScreen.this, ManagePlayers.class));
+
+            startActivity(new Intent(MainScreen.this, AddPlayers.class));
+
         }
+        //Add Matches Button
         else if(v.getId() == R.id.btnAddMatches){
-            startActivity(new Intent(MainScreen.this, ManageMatches.class));
+            /*list.add("test1");
+            list.add("test2");
+            list.add("test3");
+            list.add("test4");
+            */
+            startActivity(new Intent(MainScreen.this, AddMatches.class));
         }
     }
 
@@ -80,6 +99,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 viewHolder.win_button = (Button) convertView.findViewById(R.id.win_btn);
                 viewHolder.lose_button = (Button) convertView.findViewById(R.id.loss_btn);
                 viewHolder.listItem = (TextView) convertView.findViewById(R.id.listItem);
+                viewHolder.listItem.setText(getItem(position));
                 viewHolder.win_button.setOnClickListener(new View.OnClickListener(){
                   @Override
                   public void onClick(View v){
