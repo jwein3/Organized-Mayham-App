@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class AddPlayers extends AppCompatActivity {
-    ArrayList<String> list = MainScreen.getNamesList();
+    ArrayList list = MainScreen.getNamesList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,11 +25,17 @@ public class AddPlayers extends AppCompatActivity {
         AddPlayersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText GetText = (EditText) findViewById(R.id.GetName);
-                list.add(GetText.getText().toString());
-                Toast.makeText(getApplicationContext(),"Player Added!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(AddPlayers.this, AddPlayers.class));
+                try {
+                    EditText GetText = (EditText) findViewById(R.id.GetName);
+                    EditText GetMatchNum = (EditText) findViewById(R.id.GetMatchNumber);
+                    //list.add(GetText.getText().toString();
+                    list.add(new MainScreen.WrestlerList(GetText.getText().toString(), Integer.parseInt(GetMatchNum.getText().toString())));
+                    Toast.makeText(getApplicationContext(), "Player Added!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(AddPlayers.this, AddPlayers.class));
+                } catch(NumberFormatException e){
+                    Toast.makeText(getApplicationContext(),"Please Enter Numbers Only!",Toast.LENGTH_SHORT).show();
 
+                }
 
             }
         });

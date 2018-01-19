@@ -37,4 +37,13 @@
         android:text="Win"
         android:layout_toStartOf="@id/loss_btn" />
 
+    <TextView
+        android:id="@+id/MatchNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/win_btn"
+        android:layout_toEndOf="@+id/listItem"
+        android:layout_toRightOf="@+id/listItem"
+        android:text="Test" />
+
 </RelativeLayout>

@@ -26,7 +26,7 @@ import static android.app.ProgressDialog.show;
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
 
 
-    public static ArrayList <String> list = new ArrayList<String>();
+    public static ArrayList list = new ArrayList<WrestlerList>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,13 +40,15 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //Used for setting the player names to the TextView, figure out how to fix that
         ListView MatchList = (ListView)findViewById(R.id.MatchList);
         MatchList.setAdapter(new ListAdapter(this,R.layout.match_list_layout,list));
+        //list.add(new WrestlerList("Test",1));
         SetButtons();
        
 
         }
-    public static ArrayList<String> getNamesList(){
+    public static ArrayList<WrestlerList> getNamesList(){
         return list;
     }
+
     @Override
     public void onBackPressed(){
         startActivity(new Intent(this, MainScreen.class));
@@ -72,18 +74,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         }
         //Add Matches Button
         else if(v.getId() == R.id.btnAddMatches){
-            /*list.add("test1");
-            list.add("test2");
-            list.add("test3");
-            list.add("test4");
-            */
+
             startActivity(new Intent(MainScreen.this, AddMatches.class));
         }
     }
 
-    private class ListAdapter extends ArrayAdapter<String>{
+    private class ListAdapter extends ArrayAdapter<WrestlerList>{
         private int layout;
-        public ListAdapter(@NonNull Context context, int resource, @NonNull List<String> objects) {
+        public ListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<WrestlerList> objects) {
             super(context, resource, objects);
             layout = resource;
         }
@@ -99,11 +97,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 viewHolder.win_button = (Button) convertView.findViewById(R.id.win_btn);
                 viewHolder.lose_button = (Button) convertView.findViewById(R.id.loss_btn);
                 viewHolder.listItem = (TextView) convertView.findViewById(R.id.listItem);
-                viewHolder.listItem.setText(getItem(position));
+                viewHolder.MatchNum = (TextView) convertView.findViewById(R.id.MatchNum);
+                viewHolder.listItem.setText((CharSequence) getItem(position).getWrestlerName());
+                viewHolder.MatchNum.setText("Match # "+(CharSequence) String.valueOf(getItem(position).getMatchNum()));
                 viewHolder.win_button.setOnClickListener(new View.OnClickListener(){
                   @Override
                   public void onClick(View v){
                       Toast.makeText(getContext(), "Win Button Clicked!" + position,Toast.LENGTH_SHORT).show();
+
 
                   }
 
@@ -120,7 +121,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             }
             else{
                 mainViewHolder = (ViewHolder) convertView.getTag();
-                mainViewHolder.listItem.setText(getItem(position));
+                mainViewHolder.listItem.setText((CharSequence) getItem(position).getWrestlerName());
+                mainViewHolder.MatchNum.setText("Match # "+(CharSequence) String.valueOf(getItem(position).getMatchNum()));
             }
             return convertView;
             //return super.getView(position, convertView, parent);
@@ -129,8 +131,26 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
     public class ViewHolder{
         TextView listItem;
+        TextView MatchNum;
         Button win_button;
         Button lose_button;
+    }
+
+    public static class WrestlerList {
+        private String mWrestlerName;
+        private int mMatchNum;
+
+        public WrestlerList(String WrestlerName, int MatchNum){
+            mWrestlerName = WrestlerName;
+            mMatchNum = MatchNum;
+        }
+        public String getWrestlerName(){
+            return mWrestlerName;
+        }
+
+        public int getMatchNum(){
+            return mMatchNum;
+        }
     }
 
 }
