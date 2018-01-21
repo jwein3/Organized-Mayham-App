@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static android.app.ProgressDialog.show;
@@ -31,16 +33,32 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-
         TextView Names = (TextView) findViewById(R.id.listItem);
-
-
-        //Test to see how many items in the array this thing detects
-        //Toast.makeText(getApplicationContext(), "Entered Screen",Toast.LENGTH_SHORT).show();
-        //Used for setting the player names to the TextView, figure out how to fix that
         ListView MatchList = (ListView)findViewById(R.id.MatchList);
         MatchList.setAdapter(new ListAdapter(this,R.layout.match_list_layout,list));
-        //list.add(new WrestlerList("Test",1));
+        /*
+        list.add(new WrestlerList("test",1));
+        list.add(new WrestlerList("test",2));
+        list.add(new WrestlerList("test",3));
+        list.add(new WrestlerList("test",4));
+        list.add(new WrestlerList("test",5));
+        list.add(new WrestlerList("test",6));
+        list.add(new WrestlerList("test",7));
+        list.add(new WrestlerList("test",8));
+        list.add(new WrestlerList("test",9));
+        list.add(new WrestlerList("test",10));
+        list.add(new WrestlerList("test",11));
+        list.add(new WrestlerList("test",12));
+        list.add(new WrestlerList("test",13));
+        list.add(new WrestlerList("test",14));
+        list.add(new WrestlerList("test",15));
+        list.add(new WrestlerList("test",16));
+        list.add(new WrestlerList("test",17));
+        list.add(new WrestlerList("test",18));
+        list.add(new WrestlerList("test",19));
+        list.add(new WrestlerList("test",20));
+        */
+        SortList(list);
         SetButtons();
        
 
@@ -79,6 +97,28 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+    public static void SortList(ArrayList<WrestlerList> list){
+        Collections.sort(list, new Comparator() {
+            @Override
+            //Sorts By Match Number
+            public int compare(Object obj1, Object obj2) {
+                Integer compMatchNum1 = ((WrestlerList)obj1).getMatchNum();
+                Integer compMatchNum2 = ((WrestlerList)obj2).getMatchNum();
+                int sortComp = compMatchNum1.compareTo(compMatchNum2);
+
+                if(sortComp!=0){
+                    return sortComp;
+                }
+                //Sorts List Alphabetically once its done sorting by match number
+                else{
+                    String compName1 = ((WrestlerList) obj1).getWrestlerName();
+                    String compName2 = ((WrestlerList) obj2).getWrestlerName();
+                    return compName1.compareTo(compName2);
+                }
+            }
+        });
+    }
+
     private class ListAdapter extends ArrayAdapter<WrestlerList>{
         private int layout;
         public ListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<WrestlerList> objects) {
@@ -90,12 +130,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             ViewHolder mainViewHolder =null;
-            if(convertView == null){
+            if(convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
-                convertView= inflater.inflate(layout,parent,false);
+                convertView = inflater.inflate(layout, parent, false);
+            }
                 ViewHolder viewHolder = new ViewHolder();
                 viewHolder.win_button = (Button) convertView.findViewById(R.id.win_btn);
                 viewHolder.lose_button = (Button) convertView.findViewById(R.id.loss_btn);
+                viewHolder.delete_button = (Button) convertView.findViewById(R.id.DelBtn);
                 viewHolder.listItem = (TextView) convertView.findViewById(R.id.listItem);
                 viewHolder.MatchNum = (TextView) convertView.findViewById(R.id.MatchNum);
                 viewHolder.listItem.setText((CharSequence) getItem(position).getWrestlerName());
@@ -117,9 +159,17 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                     }
 
                 });
+                viewHolder.delete_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getContext(),"Delete Button Clicked!"+position,Toast.LENGTH_SHORT).show();
+                        list.remove(getItem(position));
+                        startActivity(new Intent(MainScreen.this, MainScreen.class));
+                    }
+                });
                 convertView.setTag(viewHolder);
-            }
-            else{
+
+            if(convertView!=null){
                 mainViewHolder = (ViewHolder) convertView.getTag();
                 mainViewHolder.listItem.setText((CharSequence) getItem(position).getWrestlerName());
                 mainViewHolder.MatchNum.setText("Match # "+(CharSequence) String.valueOf(getItem(position).getMatchNum()));
@@ -134,6 +184,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         TextView MatchNum;
         Button win_button;
         Button lose_button;
+        Button delete_button;
     }
 
     public static class WrestlerList {
@@ -152,6 +203,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             return mMatchNum;
         }
     }
+
 
 }
 

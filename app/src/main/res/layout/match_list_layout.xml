@@ -19,31 +19,37 @@
         android:id="@+id/loss_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginEnd="5dp"
-        android:text="Loss"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/win_btn"
+        android:text="Loss" />
 
     <Button
         android:id="@+id/win_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_toLeftOf="@id/loss_btn"
-        android:text="Win"
-        android:layout_toStartOf="@id/loss_btn" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/listItem"
+        android:text="Win" />
 
     <TextView
         android:id="@+id/MatchNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/win_btn"
-        android:layout_toEndOf="@+id/listItem"
-        android:layout_toRightOf="@+id/listItem"
+        android:layout_alignBaseline="@+id/loss_btn"
+        android:layout_alignBottom="@+id/loss_btn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:text="Test" />
+
+    <Button
+        android:id="@+id/DelBtn"
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/MatchNum"
+        android:layout_toLeftOf="@+id/loss_btn"
+        android:layout_toStartOf="@+id/loss_btn"
+        android:text="x" />
 
 </RelativeLayout>
