@@ -22,6 +22,7 @@ public class AddPlayers extends AppCompatActivity {
 
     public void SetButtons() {
         Button AddPlayersButton = (Button) (findViewById(R.id.btnAddPlayers));
+        //Tries to get the text from the wrestler name textbox and the match number from the match number text box and adding them to the list, warning them if there is an invalid value
         AddPlayersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,6 +44,7 @@ public class AddPlayers extends AppCompatActivity {
     public void onBackPressed(){
         startActivity(new Intent(this, MainScreen.class));
     }
+
 
 
 }

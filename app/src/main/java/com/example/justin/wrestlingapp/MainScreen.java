@@ -1,13 +1,11 @@
 package com.example.justin.wrestlingapp;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import static android.app.ProgressDialog.show;
 
@@ -29,11 +26,11 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
 
     public static ArrayList list = new ArrayList<WrestlerList>();
+    ArrayList MatchHistList = AddMatches.getMatchHistList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-        TextView Names = (TextView) findViewById(R.id.listItem);
         ListView MatchList = (ListView)findViewById(R.id.MatchList);
         MatchList.setAdapter(new ListAdapter(this,R.layout.match_list_layout,list));
         /*
@@ -81,7 +78,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
 
 
-        //Names.setText("Sup");
+
     }
     //Add Players Button
     public void onClick (View v){
@@ -145,8 +142,13 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 viewHolder.win_button.setOnClickListener(new View.OnClickListener(){
                   @Override
                   public void onClick(View v){
-                      Toast.makeText(getContext(), "Win Button Clicked!" + position,Toast.LENGTH_SHORT).show();
 
+                      Toast.makeText(getContext(), "Match sent to Match History!" + position,Toast.LENGTH_SHORT).show();
+                      MatchHistList.add(new AddMatches.MatchHistoryList(getItem(position).getWrestlerName(),getItem(position).getMatchNum(),"Won"));
+
+                      list.remove(getItem(position));
+
+                      startActivity(new Intent(MainScreen.this, MainScreen.class));
 
                   }
 
@@ -154,7 +156,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 viewHolder.lose_button.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v){
-                        Toast.makeText(getContext(), "Lose Button Clicked!" + position,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Match sent to Match History" + position,Toast.LENGTH_SHORT).show();
+                        MatchHistList.add(new AddMatches.MatchHistoryList(getItem(position).getWrestlerName(),getItem(position).getMatchNum(),"Lost"));
+                        list.remove(getItem(position));
+                        startActivity(new Intent(MainScreen.this, MainScreen.class));
 
                     }
 
